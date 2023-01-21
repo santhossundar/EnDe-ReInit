@@ -9,7 +9,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui = MainWindowUi()
         self.ui.setupUi(self)
         self.ui.push_button_add.clicked.connect(self.dataInsertionWindowShow)
+        self.ui.push_button_refresh.clicked.connect(self.refresh)
 
+    def setData(self):
         try:
             dbConnection = DBConnection(self)
             dbConnection.cursor.execute("SELECT * FROM user_account")
@@ -34,3 +36,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def dataInsertionWindowShow(self):
         self.data_insertion_window = DataInsertionWindow()
         self.data_insertion_window.show()
+
+    def refresh(self):
+        self.setData()
