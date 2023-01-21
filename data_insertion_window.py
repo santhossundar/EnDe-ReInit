@@ -26,7 +26,6 @@ class DataInsertionWindow(QtWidgets.QDialog):
             self.dbConnection.cursor.close()
             self.dbConnection.db.close()
             QtWidgets.QDialog.close(self)
-            
         else:
             QtWidgets.QMessageBox.information(QtWidgets.QMessageBox(), 'Error', 'All Fields are required!')
             

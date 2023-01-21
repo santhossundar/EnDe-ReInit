@@ -8,16 +8,16 @@ class MainWindow(QtWidgets.QMainWindow):
         super(MainWindow, self).__init__()
         self.ui = MainWindowUi()
         self.ui.setupUi(self)
+        self.dbConnection = DBConnection(self)
+        self.setData()
         self.ui.push_button_add.clicked.connect(self.dataInsertionWindowShow)
         self.ui.push_button_refresh.clicked.connect(self.refresh)
+        self.ui.push_button_delete.clicked.connect(self.delete)
 
     def setData(self):
         try:
-            dbConnection = DBConnection(self)
-            dbConnection.cursor.execute("SELECT * FROM user_account")
-            account_data = dbConnection.cursor.fetchall()
-            dbConnection.cursor.close()
-            dbConnection.db.close()
+            self.dbConnection.cursor.execute("SELECT * FROM user_account")
+            account_data = self.dbConnection.cursor.fetchall()
 
             self.ui.tableWidget.setRowCount(1)
             for i in range(self.ui.tableWidget.rowCount()):
@@ -39,3 +39,18 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def refresh(self):
         self.setData()
+
+    def delete(self):
+        try:
+            ind = self.ui.tableWidget.selectionModel().selectedRows()
+            ind2 = self.ui.tableWidget.selectionModel().currentIndex()
+            val = ind2.sibling(ind2.row(), ind2.column()).data()
+            
+            for i in sorted(ind):
+                self.ui.tableWidget.removeRow(i.row())
+                
+            self.dbConnection.cursor.execute("DELETE FROM user_account WHERE account = (?)", (val,))
+            self.dbConnection.db.commit()
+            
+        except Exception:
+            print('Nothing Selected')
