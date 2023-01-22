@@ -28,8 +28,6 @@ class DataInsertionWindow(QtWidgets.QDialog):
             QtWidgets.QDialog.close(self)
         else:
             QtWidgets.QMessageBox.information(QtWidgets.QMessageBox(), 'Error', 'All Fields are required!')
-            
-
 
         
 

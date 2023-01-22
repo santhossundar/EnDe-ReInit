@@ -2,6 +2,7 @@ from PyQt5 import QtGui, QtWidgets
 from main_window_ui import MainWindowUi
 from db_connection import DBConnection
 from data_insertion_window import DataInsertionWindow
+from decryption_window import DecryptionWindow
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent = None):
@@ -13,6 +14,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.push_button_add.clicked.connect(self.dataInsertionWindowShow)
         self.ui.push_button_refresh.clicked.connect(self.refresh)
         self.ui.push_button_delete.clicked.connect(self.delete)
+        self.ui.tableWidget.cellDoubleClicked.connect(self.decryptionWindowShow)
 
     def setData(self):
         try:
@@ -54,3 +56,10 @@ class MainWindow(QtWidgets.QMainWindow):
             
         except Exception:
             print('Nothing Selected')
+
+    def decryptionWindowShow(self):
+        index = self.ui.tableWidget.selectionModel().currentIndex()
+        value = index.sibling(index.row(), index.column()).data()
+
+        self.decryptionWindow = DecryptionWindow(value)
+        self.decryptionWindow.show()
